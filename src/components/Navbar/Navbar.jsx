@@ -10,6 +10,9 @@ import caret_icon from "../../assets/caret_icon.svg";
 import { auth } from "../../firebase"; // adjust path if needed
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
+// Import Link from react-router-dom
+import { Link } from "react-router-dom";
+
 const Navbar = () => {
   const navRef = useRef();
   const [user, setUser] = useState(null);
@@ -63,9 +66,12 @@ const Navbar = () => {
               <p onClick={handleLogout}>Sign Out</p>
             ) : (
               <p>
-                <a href="/login" style={{ color: "white", textDecoration: "none" }}>
+                <Link 
+                  to="/login" 
+                  style={{ color: "white", textDecoration: "none" }}
+                >
                   Log In
-                </a>
+                </Link>
               </p>
             )}
           </div>
