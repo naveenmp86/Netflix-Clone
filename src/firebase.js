@@ -1,7 +1,15 @@
-
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { addDoc, getFirestore } from "firebase/firestore";
+import { 
+  createUserWithEmailAndPassword, 
+  getAuth, 
+  signInWithEmailAndPassword, 
+  signOut 
+} from "firebase/auth";
+import { 
+  addDoc, 
+  getFirestore, 
+  collection 
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDsJjKB6A6TzzoJyBTjOJECUHBqebgCXqM",
@@ -15,36 +23,36 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db=getFirestore(app);
+const db = getFirestore(app);
 
-const signup = async (name, EmailAuthCredential, password) => {
-    try{
-        await createUserWithEmailAndPassword(auth, EmailAuthCredential,password);
-        const user=resizeBy.user;
-        await addDoc(collection(db,"user"),{
-            uid: user.uid,
-            name,
-            authProvider: "local",
-            email,
-        })
-    }catch(error){
-        console.log(error);
-        alert(error);
-    }
-}
+const signup = async (name, email, password) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    
+    await addDoc(collection(db, "users"), {
+      uid: user.uid,
+      name,
+      authProvider: "local",
+      email,
+    });
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
+};
 
 const login = async (email, password) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      console.log(error);
-      alert(error);
-    }
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
   }
-  
-  const logout = () => {
-    signOut(auth);
-  }
-  
-  export { auth, db, login, signup, logout };
-  
+};
+
+const logout = () => {
+  signOut(auth);
+};
+
+export { auth, db, login, signup, logout };
